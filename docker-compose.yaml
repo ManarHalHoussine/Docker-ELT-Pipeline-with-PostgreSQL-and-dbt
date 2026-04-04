@@ -1,0 +1,59 @@
+services:
+
+  # Source PostgreSQL database
+  source_postgres:
+    image: postgres:15
+
+    ports:
+      - "5433:5432"
+
+    networks:
+      - elt_networks
+
+    environment:
+      POSTGRES_DB: source_db
+      POSTGRES_USER: manar
+      POSTGRES_PASSWORD: secret
+
+    # Initialize database with sample data
+    volumes:
+      - ./source_db_init/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+
+  # Destination PostgreSQL database
+  destination_postgres:
+    image: postgres:latest
+
+    ports:
+      - "5434:5432"
+
+    networks:
+      - elt_networks
+
+    environment:
+      POSTGRES_DB: destination_db
+      POSTGRES_USER: manar
+      POSTGRES_PASSWORD: secret
+
+
+  # ELT service container
+  elt_script:
+    build:
+      context: ./elt
+      dockerfile: Dockerfile
+
+    # Run the Python ELT script
+    command: ["python", "eltScript.py"]
+
+    networks:
+      - elt_networks
+
+    depends_on:
+      - source_postgres
+      - destination_postgres
+
+
+# Custom Docker network used for communication between containers
+networks:
+  elt_networks:
+    driver: bridge
