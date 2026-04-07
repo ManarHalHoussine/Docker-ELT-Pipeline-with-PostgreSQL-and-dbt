@@ -51,7 +51,22 @@ services:
     depends_on:
       - source_postgres
       - destination_postgres
-
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.7.latest
+    command:
+        ["run",
+         "--profiles-dir",
+         "/root",
+         "--project-dir",
+         "/dbt"
+        ]
+    volumes:
+      - ./custom_postgress:/dbt
+      - ~/.dbt:/root
+    networks:
+      - elt_networks
+    depends_on:
+      - elt_script
 
 # Custom Docker network used for communication between containers
 networks:

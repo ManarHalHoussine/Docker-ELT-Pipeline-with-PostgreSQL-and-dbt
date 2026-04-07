@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: destination_db
+    database: destination_db
+    schema: public
+    tables:
+      - name: films
+      - name: actors
+      - name: film_actors
+      - name: users
+      - name: film_category

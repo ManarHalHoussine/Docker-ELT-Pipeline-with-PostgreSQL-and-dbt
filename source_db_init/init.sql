@@ -1,111 +1,156 @@
----------------------------------------
----------- CUSTOMERS TABLE-------------
-
-CREATE TABLE customers (
-    customer_id SERIAL PRIMARY KEY,
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email VARCHAR(100),
-    signup_date DATE
+    date_of_birth DATE
 );
 
-INSERT INTO customers (first_name, last_name, email, signup_date) VALUES
-('Emma','Johnson','emma.johnson@email.com','2021-02-10'),
-('Liam','Brown','liam.brown@email.com','2022-01-05'),
-('Olivia','Martinez','olivia.m@email.com','2023-03-21'),
-('Noah','Garcia','noah.g@email.com','2020-11-14'),
-('Sophia','Lee','sophia.lee@email.com','2021-08-30'),
-('Lucas','Walker','lucas.w@email.com','2022-06-12'),
-('Ava','Young','ava.y@email.com','2023-01-02'),
-('Mason','King','mason.k@email.com','2022-09-18');
+INSERT INTO users (first_name, last_name, email, date_of_birth) VALUES
+('John', 'Doe', 'john.doe@example.com', '1990-01-01'),
+('Jane', 'Smith', 'jane.smith@example.com', '1992-05-15'),
+('Alice', 'Johnson', 'alice.johnson@example.com', '1985-10-20'),
+('Bob', 'Williams', 'bob.williams@example.com', '1998-07-30'),
+('Emily', 'Clark', 'emily.clark@example.com', '1987-02-14'),
+('Michael', 'Robinson', 'michael.robinson@example.com', '1995-06-05'),
+('Sarah', 'Lewis', 'sarah.lewis@example.com', '1989-03-25'),
+('David', 'Walker', 'david.walker@example.com', '1992-11-12'),
+('Sophia', 'Hall', 'sophia.hall@example.com', '1996-08-08'),
+('James', 'Allen', 'james.allen@example.com', '1984-04-20'),
+('Olivia', 'Young', 'olivia.young@example.com', '1993-12-30'),
+('Chris', 'King', 'chris.king@example.com', '1990-09-15'),
+('Grace', 'Wright', 'grace.wright@example.com', '1997-05-10'),
+('William', 'Scott', 'william.scott@example.com', '1986-07-22');
 
-
----------------------------------------
------------ PRODUCTS TABLE-------------
-
-
-CREATE TABLE products (
-    product_id SERIAL PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
-    price DECIMAL(8,2),
-    category VARCHAR(100),
-    stock_quantity INTEGER
+CREATE TABLE films (
+    film_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    release_date DATE,
+    price DECIMAL(5,2),
+    rating VARCHAR(10),
+    user_rating DECIMAL(2,1) CHECK (user_rating >= 1 AND user_rating <= 5)
 );
 
-INSERT INTO products (product_name, price, category, stock_quantity) VALUES
-('Wireless Headphones',129.99,'Electronics',50),
-('Gaming Keyboard',89.99,'Electronics',40),
-('Running Shoes',79.99,'Sports',60),
-('Coffee Maker',49.99,'Home Appliances',30),
-('Smart Watch',199.99,'Electronics',25),
-('Yoga Mat',25.99,'Fitness',80),
-('Laptop Backpack',59.99,'Accessories',70),
-('Bluetooth Speaker',99.99,'Electronics',35),
-('Desk Lamp',34.99,'Home',45),
-('Water Bottle',19.99,'Fitness',100);
+INSERT INTO films (title, release_date, price, rating, user_rating) VALUES
+('Inception', '2010-07-16', 12.99, 'PG-13', 4.8),
+('The Shawshank Redemption', '1994-09-23', 9.99, 'R', 4.9),
+('The Godfather', '1972-03-24', 14.99, 'R', 4.7),
+('The Dark Knight', '2008-07-18', 11.99, 'PG-13', 4.8),
+('Pulp Fiction', '1994-10-14', 10.99, 'R', 4.6),
+('The Matrix', '1999-03-31', 9.99, 'R', 4.7),
+('Forrest Gump', '1994-07-06', 8.99, 'PG-13', 4.5),
+('Toy Story', '1995-11-22', 7.99, 'G', 4.4),
+('Jurassic Park', '1993-06-11', 9.99, 'PG-13', 4.3),
+('Avatar', '2009-12-18', 12.99, 'PG-13', 4.2),
+('Blade Runner 2049', '2017-10-06', 13.99, 'R', 4.3),
+('Mad Max: Fury Road', '2015-05-15', 11.99, 'R', 4.6),
+('Coco', '2017-11-22', 9.99, 'PG', 4.8),
+('Dunkirk', '2017-07-21', 12.99, 'PG-13', 4.5),
+('Spider-Man: Into the Spider-Verse', '2018-12-14', 10.99, 'PG', 4.9),
+('Parasite', '2019-10-11', 14.99, 'R', 4.6),
+('Whiplash', '2014-10-10', 9.99, 'R', 4.7),
+('Inside Out', '2015-06-19', 9.99, 'PG', 4.8),
+('The Grand Budapest Hotel', '2014-03-28', 10.99, 'R', 4.4),
+('La La Land', '2016-12-09', 11.99, 'PG-13', 4.5);
 
-
----------------------------------------
--------------ORDERS TABLE--------------
-
-CREATE TABLE orders (
-    order_id SERIAL PRIMARY KEY,
-    customer_id INTEGER REFERENCES customers(customer_id),
-    order_date DATE,
-    total_amount DECIMAL(10,2)
+CREATE TABLE film_category (
+    category_id SERIAL PRIMARY KEY,
+    film_id INTEGER REFERENCES films(film_id),
+    category_name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO orders (customer_id, order_date, total_amount) VALUES
-(1,'2024-01-10',219.98),
-(2,'2024-01-15',79.99),
-(3,'2024-02-02',129.99),
-(4,'2024-02-20',49.99),
-(5,'2024-03-01',199.99),
-(1,'2024-03-12',34.99),
-(6,'2024-03-18',59.99),
-(7,'2024-03-25',25.99);
+INSERT INTO film_category (film_id, category_name) VALUES
+(1, 'Sci-Fi'),
+(1, 'Thriller'),
+(2, 'Drama'),
+(3, 'Crime'),
+(3, 'Drama'),
+(4, 'Action'),
+(4, 'Thriller'),
+(5, 'Crime'),
+(5, 'Drama'),
+(6, 'Sci-Fi'),
+(6, 'Action'),
+(7, 'Drama'),
+(7, 'Romance'),
+(8, 'Animation'),
+(8, 'Family'),
+(9, 'Action'),
+(9, 'Adventure'),
+(10, 'Sci-Fi'),
+(10, 'Adventure'),
+(11, 'Sci-Fi'),
+(11, 'Drama'),
+(12, 'Action'),
+(12, 'Adventure'),
+(13, 'Animation'),
+(13, 'Family'),
+(14, 'War'),
+(14, 'Drama'),
+(15, 'Animation'),
+(15, 'Action'),
+(16, 'Drama'),
+(16, 'Thriller'),
+(17, 'Drama'),
+(17, 'Music'),
+(18, 'Animation'),
+(18, 'Family'),
+(19, 'Comedy'),
+(19, 'Drama'),
+(20, 'Drama'),
+(20, 'Music');
 
-
----------------------------------------
--- ORDER ITEMS TABLE
-
-
-CREATE TABLE order_items (
-    order_id INTEGER REFERENCES orders(order_id),
-    product_id INTEGER REFERENCES products(product_id),
-    quantity INTEGER,
-    PRIMARY KEY (order_id, product_id)
+CREATE TABLE actors (
+    actor_id SERIAL PRIMARY KEY,
+    actor_name VARCHAR(255) NOT NULL
 );
 
-INSERT INTO order_items (order_id, product_id, quantity) VALUES
-(1,1,1),
-(1,2,1),
-(2,3,1),
-(3,1,1),
-(4,4,1),
-(5,5,1),
-(6,9,1),
-(7,7,1),
-(8,6,1);
-
-
----------------------------------------
----------PRODUCT REVIEWS TABLE---------
-
-
-CREATE TABLE product_reviews (
-    review_id SERIAL PRIMARY KEY,
-    product_id INTEGER REFERENCES products(product_id),
-    customer_id INTEGER REFERENCES customers(customer_id),
-    rating INTEGER CHECK (rating >=1 AND rating <=5),
-    review_comment TEXT
+CREATE TABLE film_actors (
+    film_id INTEGER REFERENCES films(film_id),
+    actor_id INTEGER REFERENCES actors(actor_id),
+    PRIMARY KEY (film_id, actor_id)
 );
 
-INSERT INTO product_reviews (product_id, customer_id, rating, review_comment) VALUES
-(1,1,5,'Amazing sound quality'),
-(2,2,4,'Very comfortable keyboard'),
-(3,3,4,'Good running shoes'),
-(4,4,3,'Works fine for daily use'),
-(5,5,5,'Excellent smartwatch'),
-(6,7,4,'Nice yoga mat'),
-(7,6,5,'Perfect backpack for travel');
+INSERT INTO actors (actor_name) VALUES
+('Leonardo DiCaprio'),  -- Associated with Inception
+('Tim Robbins'),        -- Associated with The Shawshank Redemption
+('Marlon Brando'),      -- Associated with The Godfather
+('Christian Bale'),     -- Associated with The Dark Knight
+('John Travolta'),      -- Associated with Pulp Fiction
+('Keanu Reeves'),       -- Associated with The Matrix
+('Tom Hanks'),          -- Associated with Forrest Gump
+('Tom Hanks'),          -- Associated with Toy Story (Tom Hanks appears twice for demonstration purposes)
+('Sam Neill'),          -- Associated with Jurassic Park
+('Sam Worthington'),    -- Associated with Avatar
+('Ryan Gosling'),       -- Associated with Blade Runner 2049
+('Tom Hardy'),          -- Associated with Mad Max: Fury Road
+('Anthony Gonzalez'),   -- Associated with Coco
+('Fionn Whitehead'),    -- Associated with Dunkirk
+('Shameik Moore'),      -- Associated with Spider-Man: Into the Spider-Verse
+('Song Kang-ho'),       -- Associated with Parasite
+('Miles Teller'),       -- Associated with Whiplash
+('Amy Poehler'),        -- Associated with Inside Out
+('Ralph Fiennes'),      -- Associated with The Grand Budapest Hotel
+('Emma Stone');         -- Associated with La La Land
+
+INSERT INTO film_actors (film_id, actor_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20);
